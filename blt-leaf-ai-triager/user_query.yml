@@ -1,0 +1,7 @@
+User Query:
+"I am adding a new API endpoint for account data. What security risks should I consider?"
+
+Expected Retrieval:
+- Missing authorization checks
+- Least privilege
+- Access control validation
