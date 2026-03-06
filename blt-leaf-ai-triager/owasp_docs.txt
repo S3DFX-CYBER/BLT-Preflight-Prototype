@@ -1,0 +1,38 @@
+OWASP Top 10 2025
+A01: Broken Access Control
+
+Overview
+Broken Access Control occurs when applications fail to properly restrict what authenticated or unauthenticated users can do. This can allow attackers to access unauthorized data, modify other users’ resources, or perform privileged actions.
+
+Common Issues
+- Violation of least privilege (access granted too broadly)
+- Insecure Direct Object References (IDOR)
+- Missing authorization checks in APIs
+- Privilege escalation
+- Parameter tampering
+- Forced browsing to restricted pages
+- Token or session manipulation
+
+Example Risks
+1. Accessing another user’s account by modifying a request parameter:
+https://example.com/account?acct=12345
+
+If ownership is not verified, an attacker could change the parameter:
+https://example.com/account?acct=99999
+
+2. Accessing administrative endpoints without proper authorization:
+https://example.com/admin
+
+If authorization checks are missing, non-admin users may access admin functionality.
+
+Prevention
+- Enforce server-side access control checks
+- Apply the principle of least privilege
+- Deny access by default
+- Validate ownership of resources
+- Restrict API methods (POST, PUT, DELETE)
+- Log and monitor authorization failures
+- Use secure session management
+
+Key Idea
+Access control must always be enforced on the server side. Client-side checks alone are insufficient and can be bypassed by attackers.
