@@ -1,0 +1,14 @@
+Broken Access Control occurs when users can access resources they should not.
+Violation of the principle of least privilege happens when users have more permissions than needed.
+Force browsing or URL tampering can expose restricted pages.
+Insecure direct object references allow attackers to access other users' data.
+Elevation of privilege occurs when a user gains admin or higher access improperly.
+APIs without access control checks can be abused.
+CORS misconfigurations may allow unauthorized API access.
+Session management failures can let attackers act as other users.
+Sensitive data exposure occurs when encryption or protection mechanisms are missing.
+Access control logic should always be enforced on the server side.
+Logging access control failures helps detect attacks.
+Rate limiting prevents automated attacks on access control.
+JWT and cookies must be protected from tampering to prevent privilege escalation.
+Functional access control tests should be part of QA and unit testing.
