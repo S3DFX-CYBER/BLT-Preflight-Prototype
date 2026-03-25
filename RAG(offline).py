@@ -1,27 +1,45 @@
-# rag.py — minimal offline RAG demo for GSoC 2026
-# Step 1: load docs
+# rag.py — minimal REAL offline RAG demo for GSOC 2026
+
+from sentence_transformers import SentenceTransformer
+import chromadb
+
+# Step 1: Load docs
 with open("owasp_docs.txt", "r") as f:
     docs = [line.strip() for line in f if line.strip()]
 
-# Step 2: Retrieval function
+# Step 2: Initialize embedding model
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Step 3: Initialize ChromaDB (in-memory for demo)
+client = chromadb.Client()
+collection = client.create_collection(name="owasp_docs")
+
+# Step 4: Embed and store documents
+embeddings = model.encode(docs).tolist()
+
+collection.add(
+    documents=docs,
+    embeddings=embeddings,
+    ids=[str(i) for i in range(len(docs))]
+)
+
+# Step 5: Retrieval function (semantic)
 def retrieve(query, top_n=5):
-    query_words = query.lower().split()
-    scored = []
+    query_embedding = model.encode([query]).tolist()
 
-    for line in docs:
-        line_lower = line.lower()
-        score = sum(1 for word in query_words if word in line_lower)
-        if score > 0:
-            scored.append((score, line))
+    results = collection.query(
+        query_embeddings=query_embedding,
+        n_results=top_n
+    )
 
-    scored.sort(reverse=True, key=lambda x: x[0])
-    return [line for _, line in scored[:top_n]]
+    return results["documents"][0]
 
-# Step 3: main loop
+# Step 6: Main loop
 if __name__ == "__main__":
     query = input("Enter your security question: ")
-    relevant_lines = retrieve(query)
 
-    print("\nAnswer:\n Based on the context:")
-    for line in relevant_lines:
-        print(f" - {line}")
+    relevant_docs = retrieve(query)
+
+    print("\nAnswer:\nBased on retrieved OWASP context:")
+    for doc in relevant_docs:
+        print(f" - {doc}")
