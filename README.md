@@ -1,138 +1,90 @@
-# BLT Preflight – Offline RAG Demo
+# BLT Preflight – RAG Demo
 
-This repository contains a **minimal offline Retrieval-Augmented Generation (RAG) prototype** created to demonstrate how security documentation can be queried interactively.
+This repository contains two implementations demonstrating how security documentation can be queried interactively to provide contextual guidance for contributors.
 
-The goal of this demo is to show how contributor tools like **Preflight** could provide contextual security guidance by retrieving relevant information from OWASP-style documentation.
-
-This implementation is intentionally lightweight and runs **fully offline** using a simple keyword-based retrieval approach.
+The goal is to show how contributor tools like **Preflight** could provide contextual security guidance by retrieving relevant information from OWASP-style documentation.
 
 ---
 
-## Overview
+## Implementations
 
-The demo demonstrates the core RAG pipeline:
-
-1. **Document Loading**
-   - Security knowledge is stored in a text file (`docs.txt`).
-
-2. **Retrieval**
-   - When a user asks a question, the system searches the document for relevant lines using keyword matching.
-
-3. **Response Generation**
-   - The most relevant lines are returned as contextual answers.
-
-This prototype focuses on demonstrating the **concept of document retrieval for security guidance**, rather than full AI-powered generation.
+###  — Embedding-Based Demo (`preflight_rag_demo.py`)
+A second implementation using **sentence-transformers (all-MiniLM-L6-v2)** and **ChromaDB** for semantic vector retrieval. This reflects the actual architecture proposed for BLT-Preflight and demonstrates genuine RAG — embedding, vector storage, and similarity search.
 
 ---
 
 ## Project Structure
 
-preflight-offline-rag-demo/ │ ├── rag.py        # Main RAG demo script ├── docs.txt      # Security knowledge base └── README.md     # Project documentation
+```
+BLT-Preflight-Prototype/
+│
+├── preflight_rag_demo.py    # Embedding-based RAG demo (sentence-transformers + ChromaDB)
+├── owasp_docs.txt           # Security knowledge base
+└── README.md                # Project documentation
+```
 
 ---
 
-## Requirements
+## Embedding-Based RAG Demo
 
-- Python 3.x  
-- Works in:
-  - Pydroid (Android)
-  - Termux
-  - Linux / macOS / Windows Python environments
+### How it works
 
-No external libraries are required.
+1. **Document Loading** — OWASP documentation chunks loaded from `owasp_docs.txt`
+2. **Embedding** — Chunks embedded using `sentence-transformers (all-MiniLM-L6-v2)`
+3. **Vector Storage** — Embeddings stored in ChromaDB (persisted to `.chromadb/` directory)
+4. **Semantic Retrieval** — Query embedded and compared against stored chunks via cosine similarity
+5. **Response** — Top matching chunks returned as contextual guidance
 
----
+### Requirements
 
-## Running the Demo
+```
+sentence-transformers
+chromadb
+```
 
-1. Clone the repository
+Install with:
 
 ```bash
-git clone https://github.com/yourusername/preflight-offline-rag-demo.git
-cd preflight-offline-rag-demo
+pip install sentence-transformers chromadb
+```
 
-2. Run the script
+### Running
 
+```bash
+python preflight_rag_demo.py
+```
 
+### Example
 
-python rag.py
+```
+Query: I modified the login flow and changed session handling
+  [OWASP A07] Identification and Authentication Failures: Confirmation of the user's identity...
 
-3. Enter a security question when prompted.
-
-
-
-Example:
-
-Enter your security question: What is Broken Access Control?
-
-Example output:
-
-Answer:
-Based on the context:
- - Broken Access Control occurs when users can access resources they should not.
- - Violation of the principle of least privilege happens when users have more permissions than needed.
-
+Query: I added a new API endpoint without authentication checks
+  [OWASP A01] Broken Access Control: Restrictions on what authenticated users are allowed to do...
+```
 
 ---
 
-Example Questions to Try
+## Example Questions to Try
 
-What is Broken Access Control?
-
-How can attackers access other users data?
-
-What causes privilege escalation?
-
-How to prevent access control failures?
-
-
+- What is Broken Access Control?
+- How can attackers access other users' data?
+- What causes privilege escalation?
+- How to prevent injection vulnerabilities?
+- What are authentication failures?
 
 ---
 
-Limitations
 
-This demo intentionally uses simple keyword matching, so it has some limitations:
+## Purpose
 
-It does not understand natural language semantics.
+This repository serves as a proof-of-concept for the **AI Assisted Contribution Guidance for BLT-Preflight** GSoC 2026 proposal. It demonstrates how security documentation can be queried interactively to help contributors understand vulnerabilities and best practices before submitting code.
 
-Answers depend on keywords present in docs.txt.
-
-It retrieves relevant lines rather than generating new explanations.
-
-
-These limitations are acceptable for demonstrating the RAG concept in a minimal offline environment.
-
+The  implementation reflects the actual proposed architecture — sentence-transformers for embedding, ChromaDB for vector storage, and semantic similarity for retrieval.
 
 ---
 
-Future Improvements
-
-Possible enhancements include:
-
-Semantic search using embeddings
-
-Vector databases for efficient retrieval
-
-Integration with LLMs for answer generation
-
-Larger curated OWASP security datasets
-
-Integration with Preflight contributor tooling
-
-
-
----
-
-Purpose
-
-This repository serves as a proof-of-concept for using RAG to provide contextual security guidance within developer tooling like Preflight.
-
-The demo illustrates how security documentation can be queried interactively to help developers understand vulnerabilities and best practices.
-
-
----
-
-License
+## License
 
 This project is provided for demonstration and educational purposes.
-
