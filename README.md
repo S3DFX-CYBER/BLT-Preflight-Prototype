@@ -1,12 +1,12 @@
 # BLT Preflight – RAG Demo
 
-This repository contains two implementations demonstrating how security documentation can be queried interactively to provide contextual guidance for contributors.
+This repository contains one implementation demonstrating how security documentation can be queried interactively to provide contextual guidance for contributors.
 
 The goal is to show how contributor tools like **Preflight** could provide contextual security guidance by retrieving relevant information from OWASP-style documentation.
 
 ---
 
-## Implementations
+## Implementation
 
 ###  — Embedding-Based Demo (`preflight_rag_demo.py`)
 A second implementation using **sentence-transformers (all-MiniLM-L6-v2)** and **ChromaDB** for semantic vector retrieval. This reflects the actual architecture proposed for BLT-Preflight and demonstrates genuine RAG — embedding, vector storage, and similarity search.
